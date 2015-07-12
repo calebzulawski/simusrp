@@ -7,7 +7,7 @@ MEXSUFFIX=mexa64
 MATLABHOME=/opt/MATLAB/R2014a
 MEX=mex
 CXX=g++
-CFLAGS=-fPIC -ansi -pthread -DMX_COMPAT_32 -DMATLAB_MEX_FILE
+CFLAGS=-fPIC -ansi -pthread -DMX_COMPAT_32 -DMATLAB_MEX_FILE -std=c++11
 LIBS=-lm
 INCLUDE=-I$(MATLABHOME)/simulink/include -I$(MATLABHOME)/extern/include
 MEXFLAGS=-cxx CC='$(CXX)' CXX='$(CXX)' LD='$(CXX)'
