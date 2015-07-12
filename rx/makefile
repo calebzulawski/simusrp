@@ -15,7 +15,7 @@ MEXFLAGS=-cxx CC='$(CXX)' CXX='$(CXX)' LD='$(CXX)'
 all: build link
 
 link: $(OBJS)
-	$(MEX) $(MEXFLAGS) $(LIBS) $^
+	$(MEX) $(MEXFLAGS) $(LIBS) $^ -output rx
 
 build: $(SRCS)
 	$(CXX) $(CFLAGS) $(INCLUDE) -c $^
