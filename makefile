@@ -1,6 +1,6 @@
 RM=rm -f
 
-SRCS=sfun_main.cpp
+SRCS=sfun_main.cpp manager.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
 
 MEXSUFFIX=mexa64

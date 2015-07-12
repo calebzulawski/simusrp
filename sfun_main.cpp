@@ -1,20 +1,9 @@
-/* Copyright 2003-2004 The MathWorks, Inc. */
-
-// *******************************************************************
-// **** To build this mex function use: mex sfun_cppcount_cpp.cpp ****
-// *******************************************************************
-
-#include "sfun_main.h"
+#include "manager.h"
 
 #define S_FUNCTION_LEVEL 2
-#define S_FUNCTION_NAME  sfun_cppcount_cpp
+#define S_FUNCTION_NAME  simusrp
 
-// Need to include simstruc.h for the definition of the SimStruct and
-// its associated macro definitions.
-#include "simstruc.h"
-
-#define IS_PARAM_DOUBLE(pVal) (mxIsNumeric(pVal) && !mxIsLogical(pVal) &&\
-!mxIsEmpty(pVal) && !mxIsSparse(pVal) && !mxIsComplex(pVal) && mxIsDouble(pVal))
+#include "simstruc.h" //SimStruct
 
 // Function: mdlInitializeSizes ===============================================
 // Abstract:
@@ -39,7 +28,7 @@ static void mdlInitializeSizes(SimStruct *S)
 
     ssSetNumSampleTimes(S, 1);
 
-    // Reserve place for C++ object
+    //Store manager in PWork vector
     ssSetNumPWork(S, 1);
 
     ssSetSimStateCompliance(S, USE_CUSTOM_SIM_STATE);
@@ -71,9 +60,9 @@ static void mdlInitializeSampleTimes(SimStruct *S)
 #define MDL_START
 static void mdlStart(SimStruct *S)
 {
-    // Store new C++ object in the pointers vector
-    DoubleAdder *da  = new DoubleAdder();
-    ssGetPWork(S)[0] = da;
+    // Init manager and store in Pwork
+    auto mgr  = new Manager();
+    ssGetPWork(S)[0] = mgr;
 }
 
 // Function: mdlOutputs =======================================================
@@ -83,14 +72,14 @@ static void mdlStart(SimStruct *S)
 static void mdlOutputs(SimStruct *S, int_T tid)
 {
     // Retrieve C++ object from the pointers vector
-    DoubleAdder *da = static_cast<DoubleAdder *>(ssGetPWork(S)[0]);
+    auto mgr = static_cast<Manager*>(ssGetPWork(S)[0]);
     
     // Get data addresses of I/O
     InputRealPtrsType  u = ssGetInputPortRealSignalPtrs(S,0);
                real_T *y = ssGetOutputPortRealSignal(S, 0);
 
     // Call AddTo method and return peak value
-    y[0] = da->AddTo(*u[0]);
+    //y[0] = da->AddTo(*u[0]);
 }
 
 /* Define to indicate that this S-Function has the mdlG[S]etSimState mothods */
@@ -103,8 +92,8 @@ static void mdlOutputs(SimStruct *S, int_T tid)
 static mxArray* mdlGetSimState(SimStruct* S)
 {
     // Retrieve C++ object from the pointers vector
-    DoubleAdder *da = static_cast<DoubleAdder*>(ssGetPWork(S)[0]);
-    return mxCreateDoubleScalar(da->GetPeak());
+    auto mgr = static_cast<Manager*>(ssGetPWork(S)[0]);
+    //return mxCreateDoubleScalar(da->GetPeak());
 }
 /* Function: mdlGetSimState =====================================================
  * Abstract:
@@ -113,8 +102,8 @@ static mxArray* mdlGetSimState(SimStruct* S)
 static void mdlSetSimState(SimStruct* S, const mxArray* ma)
 {
     // Retrieve C++ object from the pointers vector
-    DoubleAdder *da = static_cast<DoubleAdder*>(ssGetPWork(S)[0]);
-    da->SetPeak(mxGetPr(ma)[0]);
+    auto mgr = static_cast<Manager*>(ssGetPWork(S)[0]);
+    //da->SetPeak(mxGetPr(ma)[0]);
 }
 
 // Function: mdlTerminate =====================================================
@@ -125,8 +114,8 @@ static void mdlSetSimState(SimStruct* S, const mxArray* ma)
 static void mdlTerminate(SimStruct *S)
 {
     // Retrieve and destroy C++ object
-    DoubleAdder *da = static_cast<DoubleAdder *>(ssGetPWork(S)[0]);
-    delete da;
+    auto mgr = static_cast<Manager*>(ssGetPWork(S)[0]);
+    delete mgr;
 }
 
 
