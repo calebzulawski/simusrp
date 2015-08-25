@@ -3,3 +3,6 @@
 
 # Executables
 *.mexa64
+
+# Vim
+*.swp
