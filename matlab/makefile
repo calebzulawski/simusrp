@@ -10,7 +10,7 @@ MEX=mex
 CXX=g++
 CFLAGS=-fPIC -ansi -pthread -DMX_COMPAT_32 -DMATLAB_MEX_FILE -std=c++11
 LIBS=-lm
-INCLUDE=-I$(MATLABHOME)/include -I$(MATLABHOME)/extern/include
+INCLUDE=-I$(MATLABHOME)/include -I$(MATLABHOME)/extern/include -I../usrplib
 MEXFLAGS=-cxx CC='$(CXX)' CXX='$(CXX)' LD='$(CXX)'
 
 all: build link
